@@ -33,21 +33,22 @@ If your ideas are generic, editing can't fix that. The honest answer in that cas
 
 ### As a Claude Skill
 
-Download `humanize.skill` from [Releases](../../releases), or build it yourself:
+Download `humanize.skill` from [Releases](https://github.com/jaygglypuff/skills/releases), or build it yourself:
 
 ```bash
+cd skills/humanize
 ./build.sh          # produces humanize.skill
 ```
 
-Then upload it in Claude, or drop the `humanize/` folder into your skills directory.
+Then upload it in Claude, or drop the inner `humanize/` folder into your skills directory.
 
 Once installed, it triggers on things like *"humanize this"*, *"make it sound less like ChatGPT"*, *"remove the AI tells"*, or *"this was written by AI, fix it"*.
 
 ### Scanner only, no Claude
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/humanize-skill.git
-cd humanize-skill
+git clone https://github.com/jaygglypuff/skills.git
+cd skills/skills/humanize
 python3 humanize/scripts/ai_tells.py path/to/your/content --verbose
 ```
 
@@ -60,6 +61,8 @@ pip install beautifulsoup4
 ---
 
 ## Using the scanner
+
+All paths below are relative to `skills/humanize/`.
 
 ```bash
 # one file
@@ -109,25 +112,29 @@ The same pattern can be a tic or a fact depending on context:
 | Em dash | dropped where a comma belongs, several per page | a real parenthetical from a writer who uses them |
 | "Not X, but Y" | "It isn't a product, it's a philosophy" | "the figure is total capacity, not usable capacity" — the contrast *is* the information |
 
-On a real site I recently ran this against, ~100 of the flagged three-item lists were provinces, appliances and equipment. All were kept. Stripping them to satisfy a checklist would have made the writing worse.
+On a real site this was run against, around a hundred of the flagged three-item lists turned out to be provinces, appliances and equipment. All were kept. Stripping them to satisfy a checklist would have made the writing worse.
 
 ---
 
 ## What's in here
 
+This folder lives at `skills/humanize/` in the [jaygglypuff/skills](https://github.com/jaygglypuff/skills) collection.
+
 ```
-humanize/
-  SKILL.md                          the workflow Claude follows
-  references/
-    signs-of-ai-writing.md          the full taxonomy, five buckets
-    rewrite-patterns.md             before/after pairs + judgment table
-  scripts/
-    ai_tells.py                     the scanner
-examples/
-  sample-ai-text.md                 deliberately bad text, for testing
-tests/
-  test_ai_tells.py                  regression tests
+skills/humanize/
+  humanize/                       <- the skill itself; this is what gets zipped
+    SKILL.md                      the workflow Claude follows
+    references/
+      signs-of-ai-writing.md      the full taxonomy, five buckets
+      rewrite-patterns.md         before/after pairs + judgment table
+    scripts/
+      ai_tells.py                 the scanner
+  examples/sample-ai-text.md      deliberately bad text, for testing
+  tests/test_ai_tells.py          regression tests
+  build.sh                        packages humanize/ into humanize.skill
 ```
+
+The nested `humanize/humanize/` is deliberate. The inner folder is the skill, and a `.skill` file is just that folder zipped, so it has to keep its name.
 
 The taxonomy follows Wikipedia's own five groupings: **Language and tone**, **Style**, **Markup**, **Citations**, and **Communication intended for the user**. Two patterns are singled out by editors as the strongest signals: *undue emphasis on symbolism and importance*, and *superficial analyses*.
 
@@ -135,11 +142,11 @@ The taxonomy follows Wikipedia's own five groupings: **Language and tone**, **St
 
 ## Honest caveats
 
-**The Wikipedia page could not be fetched directly.** `en.wikipedia.org` was cache-only in the environment where this was built, so the taxonomy was reconstructed from detailed secondary coverage of the page rather than from the page itself. The bucket structure, the specific tells and the caveats are faithful as far as I can verify, but **please diff `references/signs-of-ai-writing.md` against the live page** and open a PR for anything that has drifted.
+**The Wikipedia page could not be fetched directly.** `en.wikipedia.org` was cache-only in the environment where this was built, so the taxonomy was reconstructed from detailed secondary coverage of the page rather than from the page itself. The bucket structure, the specific tells and the caveats are faithful as far as could be verified, but **please diff [`humanize/references/signs-of-ai-writing.md`](humanize/references/signs-of-ai-writing.md) against the live page** and open a PR for anything that has drifted.
 
 **The patterns expire.** "Delve" was the 2023 giveaway and has faded. "Unlock", "harness" and "leverage" are on the same path. Newer models already suppress em dashes. Treat every word list here as perishable.
 
-**The scanner had a real bug until recently.** Multi-word patterns were compiled with `re.X`, which strips literal spaces, so puffery, hedging, weasel words and several other checks silently matched nothing. Fixed, with regression tests in `tests/` so it can't come back. If you forked before that, re-pull.
+**The scanner had a real bug until v1.0.0.** Multi-word patterns were compiled with `re.X`, which strips literal whitespace from a regex, so `"stands as a testament"` was really matching `"standsasatestament"`. Puffery, editorialising, superficial analysis, weasel words, crutch transitions, hollow wrap-ups and hedging all silently matched nothing, and the scanner reported clean bills on text full of tells. Fixed, with regression tests in [`tests/`](tests/test_ai_tells.py) so it cannot come back. If you forked before that, re-pull.
 
 **Over-correction is a real failure mode.** Strip out every device that might look artificial and the result reads stiffer and *more* obviously machine-made. Every fragment, every wink at the reader, a plain useful word swapped for a worse one because it appeared on a list. If a rule would make a sentence worse, the sentence wins.
 
@@ -154,7 +161,7 @@ Especially welcome:
 - False positives the scanner produces on genuinely human writing
 - Translations of the taxonomy
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Please run `python3 tests/test_ai_tells.py` before opening a PR.
+Please run `python3 tests/test_ai_tells.py` from `skills/humanize/` before opening a PR.
 
 ---
 
