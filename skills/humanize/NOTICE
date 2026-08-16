@@ -1,0 +1,42 @@
+ATTRIBUTION AND PROVENANCE
+==========================
+
+Primary source
+--------------
+Wikipedia:Signs of AI writing
+Maintained by WikiProject AI Cleanup, English Wikipedia
+https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+Licensed CC BY-SA 4.0 by the Wikimedia Foundation and its contributors.
+
+humanize/references/signs-of-ai-writing.md is a condensed and rewritten
+derivative of that page. It preserves the page's five-part structure
+(Language and tone; Style; Markup; Citations; Communication intended for the
+user), its specific pattern lists, and its governing caveats. The wording is
+substantially rewritten; the taxonomy and examples are not original to this
+repository.
+
+A NOTE ON HOW IT WAS BUILT
+--------------------------
+en.wikipedia.org was cache-only and could not be fetched directly in the
+environment where this skill was assembled. The taxonomy was therefore
+reconstructed from detailed secondary coverage of the page rather than from
+the page itself.
+
+This is disclosed because it matters: the reconstruction is faithful as far as
+could be verified, but it has not been diffed line by line against the live
+page. Users are encouraged to check it and open pull requests for anything
+that has drifted or was missed.
+
+Other sources referenced
+------------------------
+- Liang et al. (Stanford), "GPT detectors are biased against non-native
+  English writers" (2023), for the 61.3% misclassification figure.
+- Published analyses of sentence-length distribution ("burstiness") in
+  human- vs AI-flagged text, for the short-sentence proportions cited in
+  SKILL.md.
+
+Trademarks and affiliation
+--------------------------
+Not affiliated with, endorsed by, or sponsored by the Wikimedia Foundation,
+Wikipedia, or Anthropic. "Claude" is a trademark of Anthropic. Wikipedia is a
+registered trademark of the Wikimedia Foundation.
